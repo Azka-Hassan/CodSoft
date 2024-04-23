@@ -1,0 +1,56 @@
+import tkinter as tk
+from tkinter import font
+
+def on_click(event):
+    text = event.widget.cget("text")
+    if text == "=":
+        try:
+            result = str(eval(entry.get()))
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, result)
+        except Exception as e:
+            entry.delete(0, tk.END)
+            entry.insert(tk.END, "Error")
+    elif text == "C":
+        entry.delete(0, tk.END)
+    else:
+        entry.insert(tk.END, text)
+
+root = tk.Tk()
+root.title("Colorful Calculator")
+root.geometry("300x400")
+root.resizable(False, False)
+root.configure(bg="#f0f0f0")
+
+font_style = font.Font(family="Helvetica", size=16)
+
+entry = tk.Entry(root, font=font_style, bd=1, bg="darkorchid", fg="#333333", justify="right")
+entry.pack(expand=True, fill="both")
+
+button_frame = tk.Frame(root, bg="darkorchid")
+button_frame.pack(expand=True, fill="both")
+
+buttons = [
+    "7", "8", "9", "/",
+    "4", "5", "6", "*",
+    "1", "2", "3", "-",
+    "C", "0", "=", "+"
+]
+
+colors = [
+    "violet", "violet", "violet", "violet",
+    "violet", "violet", "violet", "violet",
+    "violet","violet", "violet", "violet",
+    "violet","violet", "violet", "violet"
+
+]
+
+for i, (text, color) in enumerate(zip(buttons, colors)):
+    btn = tk.Button(button_frame, text=text, font=font_style, bg=color, bd=2, fg="black" if color not in ["#f0f0f0", "#333333"] else "black")
+    btn.grid(row=i // 4, column=i % 4, sticky="nsew")
+    btn.bind("<Button-1>", on_click)
+
+for i in range(4):
+    button_frame.rowconfigure(i, weight=1)
+    button_frame.columnconfigure(i, weight=1)
+root.mainloop()
